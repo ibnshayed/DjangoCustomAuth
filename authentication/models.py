@@ -18,10 +18,24 @@ class TableCreationInfo(models.Model):
 class Permission(TableCreationInfo):
 	label = models.CharField(max_length=100)
 
+	def save(self, *args, **kwargs):
+		self.label = self.label.upper().replace(' ', '_')
+		super().save(*args, **kwargs)
+
+	def __str__(self):
+		return self.label
+	
+
 class Role(TableCreationInfo):
 	label = models.CharField(max_length=50)
 	permissions = models.ManyToManyField(Permission, related_name='roles')
 
+	def save(self, *args, **kwargs):
+		self.label = self.label.upper().replace(' ', '_')
+		super().save(*args, **kwargs)
+	
+	def __str__(self):
+		return self.label
 
 
 class UserType(models.TextChoices):
